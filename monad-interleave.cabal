@@ -90,7 +90,7 @@ common ghc-options
     ghc-options:
       -Wno-missing-kind-signatures
 
-library name
+library
   import: ghc-options
   exposed-modules:
     Control.Monad.Interleave
