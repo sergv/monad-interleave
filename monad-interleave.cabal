@@ -18,4 +18,5 @@ tested-with:     GHC ==6.10.1
 library
     exposed-modules: Control.Monad.Interleave
     build-depends:   base
+    hs-source-dirs:  src
     ghc-options:     -Wall
