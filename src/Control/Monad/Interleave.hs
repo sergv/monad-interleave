@@ -11,10 +11,10 @@ module Control.Monad.Interleave
   ( MonadInterleave(..)
   ) where
 
-import Control.Monad.ST
-import Control.Monad.ST.Unsafe
+import qualified Control.Monad.ST as Strict
 import qualified Control.Monad.ST.Lazy as Lazy
 import qualified Control.Monad.ST.Lazy.Unsafe as Lazy
+import qualified Control.Monad.ST.Unsafe as Strict
 import System.IO.Unsafe
 
 -- | Monads that have an operation like 'unsafeInterleaveIO'.
@@ -26,9 +26,9 @@ instance MonadInterleave IO where
   {-# INLINE unsafeInterleave #-}
   unsafeInterleave = unsafeInterleaveIO
 
-instance MonadInterleave (ST s) where
+instance MonadInterleave (Strict.ST s) where
   {-# INLINE unsafeInterleave #-}
-  unsafeInterleave = unsafeInterleaveST
+  unsafeInterleave = Strict.unsafeInterleaveST
 
 instance MonadInterleave (Lazy.ST s) where
   {-# INLINE unsafeInterleave #-}
