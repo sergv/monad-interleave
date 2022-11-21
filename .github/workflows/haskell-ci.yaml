@@ -1,0 +1,75 @@
+name: Haskell-CI
+on:
+  - push
+  - pull_request
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  main:
+    name: GHC ${{ matrix.ghc }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        ghc:
+          - "8.0.2"
+          - "8.2.2"
+          - "8.4.4"
+          - "8.6.5"
+          - "8.8.4"
+          - "8.10.7"
+          - "9.0.2"
+          - "9.2.4"
+          - "9.4.2"
+        include:
+        - os: macOS-latest
+          ghc: "9.4.2"
+        - os: windows-latest
+          ghc: "9.4.2"
+        - os: ubuntu-18.04
+          ghc: "7.0.4"
+        - os: ubuntu-18.04
+          ghc: "7.2.2"
+        - os: ubuntu-18.04
+          ghc: "7.4.2"
+        - os: ubuntu-18.04
+          ghc: "7.6.3"
+        - os: ubuntu-18.04
+          ghc: "7.8.4"
+        - os: ubuntu-18.04
+          ghc: "7.10.3"
+    steps:
+    - uses: actions/checkout@v3
+    - uses: haskell/actions/setup@v2
+      id: setup-haskell-cabal
+      with:
+        ghc-version: ${{ matrix.ghc }}
+    - uses: actions/cache@v2
+      name: Cache cabal stuff
+      with:
+        path: |
+          ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
+          dist-newstyle
+        key: ${{ runner.os }}-${{ matrix.ghc }}
+    - name: Cabal version
+      run: |
+        cabal --version
+    - name: Build & Test
+      run: |
+        cabal sdist --ignore-project --output-directory .
+        cabal get monad-interleave-*.tar.gz
+        cd monad-interleave-*/
+        cabal build all --enable-tests
+        cabal test --enable-tests --test-show-details=direct all
+    - name: Haddock
+      run: |
+        cd monad-interleave-*/
+        cabal haddock all
+    - name: Cabal check
+      run: |
+        cd monad-interleave-*/
+        cabal check
