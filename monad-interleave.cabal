@@ -29,7 +29,11 @@ tested-with:
   GHC ==6.10.1
 
 homepage:
-  http://github.com/sergv/monad-interleave
+  https://github.com/sergv/monad-interleave
+
+source-repository head
+  type: git
+  location: https://github.com/sergv/monad-interleave.git
 
 common ghc-options
   default-language:
