@@ -46,6 +46,8 @@ tested-with:
 
 homepage:
   https://github.com/sergv/monad-interleave
+bug-reports:
+  https://github.com/sergv/monad-interleave/issues
 
 source-repository head
   type: git
