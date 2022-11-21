@@ -1,35 +1,35 @@
 -----------------------------------------------------------------------------
 -- |
 -- Module     : Control.Monad.Interleave
--- Copyright  : Copyright (c) , Patrick Perry <patperry@stanford.edu>
+-- Copyright  : Copyright (c) Patrick Perry <patperry@stanford.edu>, Sergey Vinokurov <serg.foo@gmail.com>
 -- License    : BSD3
--- Maintainer : Patrick Perry <patperry@stanford.edu>
--- Stability  : experimental
+-- Maintainer : Sergey Vinokurov <serg.foo@gmail.com>
 --
 -- Monads with an unsaveInterleaveIO-like operation.
---
 
-module Control.Monad.Interleave (
-    MonadInterleave(..),
-    ) where
+module Control.Monad.Interleave
+  ( MonadInterleave(..)
+  ) where
 
 import Control.Monad.ST
+import Control.Monad.ST.Unsafe
 import qualified Control.Monad.ST.Lazy as Lazy
+import qualified Control.Monad.ST.Lazy.Unsafe as Lazy
 import System.IO.Unsafe
 
 -- | Monads that have an operation like 'unsafeInterleaveIO'.
 class Monad m => MonadInterleave m where
-    -- | Get the baton from the monad without doing any computation.
-    unsafeInterleave :: m a -> m a
+  -- | Get the baton from the monad without doing any computation.
+  unsafeInterleave :: m a -> m a
 
 instance MonadInterleave IO where
-    unsafeInterleave = unsafeInterleaveIO
-    {-# INLINE unsafeInterleave #-}
-    
+  {-# INLINE unsafeInterleave #-}
+  unsafeInterleave = unsafeInterleaveIO
+
 instance MonadInterleave (ST s) where
-    unsafeInterleave = unsafeInterleaveST
-    {-# INLINE unsafeInterleave #-}
-    
+  {-# INLINE unsafeInterleave #-}
+  unsafeInterleave = unsafeInterleaveST
+
 instance MonadInterleave (Lazy.ST s) where
-    unsafeInterleave = Lazy.unsafeInterleaveST
-    {-# INLINE unsafeInterleave #-}
+  {-# INLINE unsafeInterleave #-}
+  unsafeInterleave = Lazy.unsafeInterleaveST

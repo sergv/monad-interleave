@@ -1,22 +1,69 @@
-name:            monad-interleave
-version:         0.1
-homepage:        http://github.com/patperry/monad-interleave
-synopsis:        Monads with an unsaveInterleaveIO-like operation.
+cabal-version: 2.2
+name:
+  monad-interleave
+version:
+  0.1
+synopsis:
+  Monads with an unsaveInterleaveIO-like operation.
 description:
-    A type class for monads that have an \"unsafeInterleave\" operation.
-    Instances are provided for IO and both strict and lazy ST.
-category:        Monads
-license:         BSD3
-license-file:    LICENSE
-copyright:       (c) 2009. Patrick Perry <patperry@stanford.edu>
-author:          Patrick Perry
-maintainer:      Patrick Perry <patperry@stanford.edu>
-cabal-version: >= 1.2.0
-build-type:      Simple
-tested-with:     GHC ==6.10.1
+  A type class for monads that have an \"unsafeInterleave\" operation.
+  Instances are provided for IO and both strict and lazy ST.
+category:
+  Monads
+license:
+  BSD-3-Clause
+license-file:
+  LICENSE
+copyright:
+  (c) 2009. Patrick Perry <patperry@stanford.edu>
+  (c) 2022. Sergey Vinokurov <serg.foo@gmail.com>
+author:
+  Patrick Perry
+maintainer:
+  Sergey Vinokurov <serg.foo@gmail.com>
 
-library
-    exposed-modules: Control.Monad.Interleave
-    build-depends:   base
-    hs-source-dirs:  src
-    ghc-options:     -Wall
+build-type:
+  Simple
+
+tested-with:
+  GHC ==6.10.1
+
+homepage:
+  http://github.com/sergv/monad-interleave
+
+common ghc-options
+  default-language:
+    Haskell2010
+
+  ghc-options:
+    -Weverything
+    -Wno-all-missed-specialisations
+    -Wno-implicit-prelude
+    -Wno-missed-specialisations
+    -Wno-missing-import-lists
+    -Wno-missing-local-signatures
+    -Wno-missing-safe-haskell-mode
+    -Wno-safe
+    -Wno-type-defaults
+    -Wno-unsafe
+
+  if impl(ghc >= 8.8)
+    ghc-options:
+      -Wno-missing-deriving-strategies
+
+  if impl(ghc >= 8.10)
+    ghc-options:
+      -Wno-prepositive-qualified-module
+
+  if impl(ghc >= 9.2)
+    ghc-options:
+      -Wno-missing-kind-signatures
+
+library name
+  import: ghc-options
+  exposed-modules:
+    Control.Monad.Interleave
+  hs-source-dirs:
+    src
+  build-depends:
+    , base >= 4 && <5
